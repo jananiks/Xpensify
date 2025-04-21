@@ -33,5 +33,22 @@ router.post("/minus", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+
+router.get("/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    if (!email) {
+      return res.status(400).json({ error: "Email is required!" });
+    }
+
+    const expenseDetails = await AddExpense.find({ email }).sort({ date: -1, time: -1 });
+
+    res.status(200).json(expenseDetails);
+  } catch (err) {
+    console.error("❌ Error fetching income:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
   
 module.exports = router;
